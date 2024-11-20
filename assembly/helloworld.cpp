@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <emscripten.h>
 
+EMSCRIPTEN_KEEPALIVE
+int main()
+{
+    printf("Hello world\n");
+    return 0;
+}
 extern "C"
 {
     EMSCRIPTEN_KEEPALIVE
@@ -8,11 +14,4 @@ extern "C"
     {
         return a + b;
     }
-}
-
-EMSCRIPTEN_KEEPALIVE
-int main()
-{
-    printf("Hello world, %d\n", AddNums(3, 5));
-    return 0;
 }

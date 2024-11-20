@@ -34,7 +34,7 @@ function initializeDistanceMatrix(size) {
 
 
 
-const fixedBlocks = [
+var fixedBlocks = [
   { x: 460, y: 504, label: "0" },
   { x: 292, y: 495, label: "1" },
   { x: 296, y: 355, label: "2" },
@@ -58,7 +58,7 @@ const fixedBlocks = [
   { x: 464, y: 452, label: "20" },
 ];
 
-const fixedEdges = [
+var fixedEdges = [
   [1, 2],
   [2, 3],
   [1, 0],

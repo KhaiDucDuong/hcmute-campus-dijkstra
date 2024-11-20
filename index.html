@@ -1,88 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./style.css" />
-    <title>Dijkstra Solver</title>
-    <script src="./assembly/a.out.js"></script>
-  </head>
 
-  <body>
-    <header>
-      <div class="title">
-        <a href="index.html">Dijkstra Solver</a>
-        <a href="./instructions.html"
-          ><img
-            src="https://cdn4.iconfinder.com/data/icons/web-mobile1/100/Untitled-8-512.png"
-            alt=""
-        /></a>
-      </div>
-      <div class="options">
-        <div>
-          <button class="outline-btn" id="add-edge-enable" onclick="addEdges()">
-            Add edges
-          </button>
-          <button
-            class="outline-btn reset-btn"
-            onclick="resetDrawingArea()"
-            disabled
-          >
-            Clear
-          </button>
-        </div>
-        <div>
-          <input
-            type="number"
-            inputmode="numeric"
-            id="source-node"
-            placeholder="Source Node"
-          />
-          <button class="outline-btn run-btn" onclick="runAlgorithm()" disabled>
-            Run
-          </button>
-        </div>
-        <div>
-          <script>
-            var addNums = Module.cwrap(
-              "AddNums",
-              "number",
-              ["number","number"],
-            ) 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="./style.css" />
+  <title>Dijkstra Solver</title>
+  <!-- <script src="./assembly/a.out.js"></script> -->
+  <script src="./assembly/dijkstra.js"></script>
+</head>
 
-            function run_wasm() {
-              var result = Module.ccall("main", "number", null, null);
-              console.log(result);
-
-              var a = document.querySelector("#a").value;
-              var b = document.querySelector("#b").value;
-              result = Module.ccall(
-                "AddNums",
-                "number",
-                ["number", "number"],
-                [a, b]
-              );
-              console.log(result);
-
-              result = addNums(a, b);
-              console.log(result);
-            }
-          </script>
-          <input type="number" id="a" />
-          <input type="number" id="b" />
-          <button onclick="run_wasm()">Add</button>
-        </div>
-      </div>
-    </header>
-    <div class="drawing-area">
-      <canvas id="mapCanvas"></canvas>
-      <p class="click-instruction">Click to create node</p>
+<body>
+  <header>
+    <div class="title">
+      <a href="index.html">Dijkstra Solver</a>
+      <a href="./instructions.html"><img src="https://cdn4.iconfinder.com/data/icons/web-mobile1/100/Untitled-8-512.png"
+          alt="" /></a>
     </div>
-    <div class="path"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.1/gsap.min.js"></script>
-    <script src="./gsap.js"></script>
-    <script src="./script.js"></script>
-  </body>
+    <div class="options">
+      <div>
+        <button class="outline-btn" id="add-edge-enable" onclick="addEdges()">
+          Add edges
+        </button>
+        <button class="outline-btn reset-btn" onclick="resetDrawingArea()" disabled>
+          Clear
+        </button>
+      </div>
+      <div>
+        <input type="number" inputmode="numeric" id="source-node" placeholder="Source Node" />
+        <button class="outline-btn run-btn" onclick="runAlgorithm()" disabled>
+          Run
+        </button>
+      </div>
+      <div>
+        <script>
+          // var addNums = Module.cwrap(
+          //   "AddNums",
+          //   "number",
+          //   ["number","number"],
+          // ) 
+
+          // function run_wasm() {
+          //   var result = Module.ccall("main", "number", null, null);
+          //   console.log(result);
+
+          //   var a = document.querySelector("#a").value;
+          //   var b = document.querySelector("#b").value;
+          //   result = Module.ccall(
+          //     "AddNums",
+          //     "number",
+          //     ["number", "number"],
+          //     [a, b]
+          //   );
+          //   console.log(result);
+
+          //   result = addNums(a, b);
+          //   console.log(result);
+          // }
+          // var memory = new WebAssembly.Memory({
+          //   initial: 256,
+          //   maximum: 512
+          // });
+
+
+          // code 2
+          // var exports;
+          // WebAssembly.instantiateStreaming(fetch("./assembly/dijkstra.wasm"), {
+          //   // js: {
+          //   //   mem: memory
+          //   // }
+          // })
+          //   .then(results => {
+          //     exports = results.instance.exports;
+          //     memory = results.instance.exports.memory;
+          //   });
+
+          // function run_wasm() {
+          //   var arr = new Uint32Array(memory.buffer);
+          //   for (var i = 0; i < 10; i++) {
+          //     arr[i] = i * 2;
+          //   }
+
+          //   var sum = exports.accumulate(0, 10);
+          // document.querySelector("#ret")
+          //   .innerHTML += `${sum}<br>`;
+          // }
+
+
+
+          // var Module = {
+          //   onRuntimeInitialized: function () {
+          //     console.log('Process Graph result: ' + Module.processGraph(nodes, edges));
+          //   }
+          // };
+
+          // var exports;
+          // WebAssembly.instantiateStreaming(fetch("./assembly/dijkstra.wasm"), {})
+          //   .then(results => {
+          //     exports = results.instance.exports;
+          //   });
+
+          function run_wasm() {
+            // const nodes = fixedBlocks.map(block => ({
+            //   block.x,
+            //   y: block.y,
+            //   label: block.label,
+            // }));
+            // const nodes = [Module.Node(10, 20, "1"), Module.Node(10, 20, "2")];
+
+            // const nodes = [];
+            // fixedBlocks.forEach(block => {
+            //   nodes.push([block.x, block.y, block.label]);
+            // });;
+            // const edges = fixedEdges;
+            // const results = Module.processGraph(nodes, edges);
+            // document.querySelector("#ret")
+            //   .innerHTML += `${results}<br>`;
+            const nodes = new Array();
+            fixedBlocks.forEach(block => {
+              nodes.push(new Module.Node(block.x, block.y, Number(block.label)));
+            });;
+            console.log("Nodes: " + nodes);
+
+            const edges = new Array();
+            fixedEdges.forEach(edge => {
+              edges.push(new Module.Edge(edge[0], edge[1]))
+            })
+            console.log("Edges: " + edges);
+
+            const dijkstra = new Module.Dijkstra(nodes, edges);
+            console.log("Dijkstra: " + dijkstra);
+
+          }
+        </script>
+        <input type="number" id="a" />
+        <input type="number" id="b" />
+        <button onclick="run_wasm()">Add</button>
+        <div id="ret"></div>
+      </div>
+    </div>
+  </header>
+  <div class="drawing-area">
+    <canvas id="mapCanvas"></canvas>
+    <p class="click-instruction">Click to create node</p>
+  </div>
+  <div class="path"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.1/gsap.min.js"></script>
+  <script src="./gsap.js"></script>
+  <script src="./script.js"></script>
+</body>
+
 </html>

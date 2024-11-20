@@ -1316,8 +1316,8 @@ var wasmImports = {
 };
 var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors', 0);
-var _AddNums = Module['_AddNums'] = createExportWrapper('AddNums', 2);
 var ___original_main = Module['___original_main'] = createExportWrapper('__original_main', 0);
+var _AddNums = Module['_AddNums'] = createExportWrapper('AddNums', 2);
 var _main = Module['_main'] = createExportWrapper('main', 2);
 var _fflush = createExportWrapper('fflush', 1);
 var _strerror = createExportWrapper('strerror', 1);
