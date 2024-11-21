@@ -17,7 +17,9 @@ function initializeDistanceMatrix(size) {
       const y1 = parseInt(startBlock.style.top, 10);
       const x2 = parseInt(endBlock.style.left, 10);
       const y2 = parseInt(endBlock.style.top, 10);
-      const distance = Math.round(Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) / 10);
+      const distance = Math.round(
+        Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) / 10
+      );
 
       // Update the distance matrix
       dist[start][end] = distance;
@@ -25,14 +27,14 @@ function initializeDistanceMatrix(size) {
 
       console.log(`Distance set between ${start} and ${end}: ${distance}`);
     } else {
-      console.warn(`Could not find start or end block for edge ${start}-${end}`);
+      console.warn(
+        `Could not find start or end block for edge ${start}-${end}`
+      );
     }
   });
 
   console.log("Distance Matrix:", dist);
 }
-
-
 
 var fixedBlocks = [
   { x: 460, y: 504, label: "0" },
@@ -56,6 +58,11 @@ var fixedBlocks = [
   { x: 580, y: 597, label: "18" },
   { x: 540, y: 454, label: "19" },
   { x: 464, y: 452, label: "20" },
+  { x: 883, y: 305, label: "21" },
+  { x: 970, y: 255, label: "22" },
+  { x: 982, y: 343, label: "23" },
+  { x: 874, y: 395, label: "24" },
+  { x: 980, y: 421, label: "25" },
 ];
 
 var fixedEdges = [
@@ -85,16 +92,21 @@ var fixedEdges = [
   [15, 14],
   [15, 16],
   [9, 10],
+  [21, 22],
+  [21, 23],
+  [21, 24],
+  [22, 23],
+  [23, 25],
+  [24, 25],
 ];
 
-
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   const canvasContainer = document.querySelector(".drawing-area");
 
   // Apply the header height as padding to push the canvas down
   canvasContainer.style.paddingTop = 105 + "px";
 
-  document.querySelector('.run-btn').disabled = false;
+  document.querySelector(".run-btn").disabled = false;
 
   // Initialize distance matrix with size 'cnt'
   initializeDistanceMatrix(cnt);
@@ -102,7 +114,6 @@ window.addEventListener('DOMContentLoaded', () => {
   // Load and draw the image
   loadAndDrawImage();
 });
-
 
 // Select the canvas and set the context
 const canvas = document.getElementById("mapCanvas");
@@ -115,7 +126,7 @@ canvas.height = 640; // Adjust to your image height
 // Function to load and draw the image
 function loadAndDrawImage() {
   const mapImage = new Image();
-  mapImage.src = 'img/HCMUTE_map.jpg'; // Ensure this path is correct
+  mapImage.src = "img/HCMUTE_map.jpg"; // Ensure this path is correct
 
   mapImage.onload = function () {
     // Draw the image on the canvas after it fully loads
@@ -123,7 +134,7 @@ function loadAndDrawImage() {
 
     // Initialize fixed blocks after the image loads
     initializeFixedBlocks();
-    initializeFixedEdges();  // Draw fixed edges after blocks
+    initializeFixedEdges(); // Draw fixed edges after blocks
     initializeDistanceMatrix(cnt);
   };
 }
@@ -221,7 +232,6 @@ const appendBlock = (x, y) => {
   blocks.appendChild(block);
 };
 
-
 // Allow creating nodes on screen by clicking
 blocks.addEventListener("click", (e) => {
   if (addEdge) return;
@@ -236,8 +246,6 @@ blocks.addEventListener("click", (e) => {
   // Create a block at the specified position
   appendBlock(x, y);
 });
-
-
 
 // Add click event listener to the drawing area
 
@@ -282,8 +290,12 @@ const drawLine = (x1, y1, x2, y2, ar, bypassCheck = false) => {
     dist[n2][n1] = Number(e.target.innerText);
   });
 
-  line.style.transform = `rotate(${x1 > x2 ? Math.PI + Math.atan(slope) : Math.atan(slope)}rad)`;
-  p.style.transform = `rotate(${x1 > x2 ? (Math.PI + Math.atan(slope)) * -1 : Math.atan(slope) * -1}rad)`;
+  line.style.transform = `rotate(${
+    x1 > x2 ? Math.PI + Math.atan(slope) : Math.atan(slope)
+  }rad)`;
+  p.style.transform = `rotate(${
+    x1 > x2 ? (Math.PI + Math.atan(slope)) * -1 : Math.atan(slope) * -1
+  }rad)`;
 
   line.append(p);
   blocks.appendChild(line);
@@ -318,8 +330,6 @@ function runAlgorithm() {
   findShortestPath(sourceNode);
 }
 
-
-
 // Function to find shortest path from given source to all other nodes
 // Function to find shortest path from given source to all other nodes
 const findShortestPath = (source) => {
@@ -340,7 +350,7 @@ const findShortestPath = (source) => {
   while (unvisited.length) {
     let mini = unvisited.reduce((a, b) => (cost[a] < cost[b] ? a : b));
     visited.push(mini);
-    unvisited = unvisited.filter(node => node !== mini);
+    unvisited = unvisited.filter((node) => node !== mini);
 
     console.log(`Visiting node ${mini}, Cost: ${cost[mini]}`);
 
@@ -357,8 +367,6 @@ const findShortestPath = (source) => {
   console.log("Final Costs:", cost);
   indicatePath(parent, source);
 };
-
-
 
 // Updated indicatePath to take source as parameter
 const indicatePath = async (parentArr, src) => {
@@ -395,7 +403,6 @@ const printPath = async (parent, j, el_p) => {
     await colorEdge(tmp);
   }
 };
-
 
 const colorEdge = async (el) => {
   if (el.style.backgroundColor !== "aqua") {
