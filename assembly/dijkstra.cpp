@@ -167,17 +167,40 @@ public:
         return res;
     }
 
-    
-};
+    std::vector<Node> findPath(int srcLabel, int destLabel){
+        Node* srcNode = nullptr;
+        Node* destNode = nullptr;
 
-// EMSCRIPTEN_KEEPALIVE int
-// processGraph(const std::vector<Node> &nodes, const std::vector<Edge> &edges)
-// {
-//     int totalNodes = nodes.size();
-//     int totalEdges = edges.size();
-//     // Example: Just return the sum of nodes and edges as a dummy process
-//     return totalNodes + totalEdges;
-// }
+        for (auto& node : nodes) {
+            if (node.getLabel() == srcLabel) {
+                srcNode = &node;
+            }
+            if (node.getLabel() == destLabel) {
+                destNode = &node;
+            }
+            if (srcNode && destNode) {
+                break;
+            }
+        }
+
+        if (!srcNode || !destNode) {
+            return {};
+        }
+
+        printf("Source Node: x-%d; y-%d; label-%d\n", srcNode->getX(), srcNode->getY(), srcNode->getLabel());
+        printf("Destination Node: x-%d; y-%d; label-%d\n", destNode->getX(), destNode->getY(), destNode->getLabel());
+
+        std::vector<Node> path = findPathDijkstra(*srcNode, *destNode);
+
+        return path;
+    }
+
+private:
+    std::vector<Node> findPathDijkstra(Node srcNode, Node destNode){
+        std::vector<Node> path;
+        return path;
+    }
+};
 
 EMSCRIPTEN_BINDINGS(graph)
 {
@@ -202,17 +225,6 @@ EMSCRIPTEN_BINDINGS(graph)
         .property("edges", &Dijkstra::getEdges, &Dijkstra::setEdges)
         .function("addNode", &Dijkstra::addNode)
         .function("addEdge", &Dijkstra::addEdge)
-        .function("toString", &Dijkstra::toString);
-    // emscripten::value_array<Node>("Node")
-    //     .element(&Node::x)
-    //     .element(&Node::y)
-    //     .element(&Node::label);
-
-    // emscripten::value_array<Edge>("Edge");
-
-    // // emscripten::register_vector<Node>("vector<Node>");
-    // // emscripten::register_vector<Edge>("vector<Edge>");
-
-    // emscripten::function("processGraph", &processGraph);
+        .function("toString", &Dijkstra::toString)
+        .function("findPath", &Dijkstra::findPath);
 }
-// }

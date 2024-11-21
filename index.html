@@ -1,79 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Dijkstra Solver</title>
+    <!-- <script src="./assembly/a.out.js"></script> -->
+    <script src="./assembly/dijkstra.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="./style.css" />
-  <title>Dijkstra Solver</title>
-  <!-- <script src="./assembly/a.out.js"></script> -->
-  <script src="./assembly/dijkstra.js"></script>
-</head>
+  <body onload="load_wasm()">
+    <script>
+      var dijkstra;
 
-<body onload="load_wasm()">
-  <script>
-    function load_wasm() {
-      console.log("Creating Dijkstra object...");
-      const dijkstra = new Module.Dijkstra();
+      function load_wasm() {
+        console.log("Creating Dijkstra object...");
+        dijkstra = new Module.Dijkstra();
 
-      fixedBlocks.forEach(block => {
-        dijkstra.addNode(new Module.Node(block.x, block.y, Number(block.label)));
-      });;
+        fixedBlocks.forEach((block) => {
+          dijkstra.addNode(
+            new Module.Node(block.x, block.y, Number(block.label))
+          );
+        });
 
-      fixedEdges.forEach(edge => {
-        dijkstra.addEdge(new Module.Edge(edge[0], edge[1]))
-      })
+        fixedEdges.forEach((edge) => {
+          dijkstra.addEdge(new Module.Edge(edge[0], edge[1]));
+        });
 
-      console.log("Dijkstra: " + dijkstra.toString());
-    }
+        console.log("Dijkstra: " + dijkstra.toString());
+      }
 
-    function findPath() {
-      document.getElementById("#src-node").va
-    }
-  </script>
-  <header>
-    <div class="title">
-      <a href="index.html">Dijkstra Solver</a>
-      <a href="./instructions.html"><img src="https://cdn4.iconfinder.com/data/icons/web-mobile1/100/Untitled-8-512.png"
-          alt="" /></a>
+      function findPath_wasm() {
+        const src_label = document.querySelector("#src-node").value;
+        const dest_label = document.querySelector("#dest-node").value;
+
+        if (src_label && dest_label) {
+          const res = dijkstra.findPath(Number(src_label), Number(dest_label));
+          console.log("Path result: " + res);
+        }
+        else {
+          console.log("Please select src and dest labels");
+        }
+      }
+    </script>
+    <header>
+      <div class="title">
+        <a href="index.html">Dijkstra Solver</a>
+        <a href="./instructions.html"
+          ><img
+            src="https://cdn4.iconfinder.com/data/icons/web-mobile1/100/Untitled-8-512.png"
+            alt=""
+        /></a>
+      </div>
+      <div class="options">
+        <div>
+          <button class="outline-btn" id="add-edge-enable" onclick="addEdges()">
+            Add edges
+          </button>
+          <button
+            class="outline-btn reset-btn"
+            onclick="resetDrawingArea()"
+            disabled
+          >
+            Clear
+          </button>
+        </div>
+        <div>
+          <input
+            type="number"
+            inputmode="numeric"
+            id="source-node"
+            placeholder="Source Node"
+          />
+          <button class="outline-btn run-btn" onclick="runAlgorithm()" disabled>
+            Run
+          </button>
+        </div>
+        <div>
+          <input
+            type="number"
+            inputmode="numeric"
+            min="0"
+            id="src-node"
+            placeholder="Source Node"
+          />
+          <input
+            type="number"
+            inputmode="numeric"
+            min="0"
+            id="dest-node"
+            placeholder="Destination Node"
+          />
+          <button
+            class="outline-btn run-btn"
+            onclick="findPath_wasm()"
+          >
+            Find Path
+          </button>
+        </div>
+        <div>
+          <div id="ret"></div>
+        </div>
+      </div>
+    </header>
+    <div class="drawing-area">
+      <canvas id="mapCanvas"></canvas>
+      <p class="click-instruction">Click to create node</p>
     </div>
-    <div class="options">
-      <div>
-        <button class="outline-btn" id="add-edge-enable" onclick="addEdges()">
-          Add edges
-        </button>
-        <button class="outline-btn reset-btn" onclick="resetDrawingArea()" disabled>
-          Clear
-        </button>
-      </div>
-      <div>
-        <input type="number" inputmode="numeric" id="source-node" placeholder="Source Node" />
-        <button class="outline-btn run-btn" onclick="runAlgorithm()" disabled>
-          Run
-        </button>
-      </div>
-      <div>
-        <input type="number" inputmode="numeric" min="0" id="src-node" placeholder="Source Node" />
-        <input type="number" inputmode="numeric" min="0" id="dest-node" placeholder="Destination Node" />
-        <button class="outline-btn run-btn" onclick="runAlgorithm()" disabled>
-          Find Path
-        </button>
-      </div>
-      <div>
-        <div id="ret"></div>
-      </div>
-    </div>
-  </header>
-  <div class="drawing-area">
-    <canvas id="mapCanvas"></canvas>
-    <p class="click-instruction">Click to create node</p>
-  </div>
-  <div class="path"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.1/gsap.min.js"></script>
-  <script src="./gsap.js"></script>
-  <script src="./script.js"></script>
-</body>
-
+    <div class="path"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.1/gsap.min.js"></script>
+    <script src="./gsap.js"></script>
+    <script src="./script.js"></script>
+  </body>
 </html>
