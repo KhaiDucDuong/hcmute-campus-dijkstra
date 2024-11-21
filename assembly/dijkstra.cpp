@@ -184,6 +184,7 @@ public:
         }
 
         if (!srcNode || !destNode) {
+            printf("Cannot find src node or dest node. Check your input data.\n");
             return {};
         }
 
