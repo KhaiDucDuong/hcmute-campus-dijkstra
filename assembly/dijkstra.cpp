@@ -145,6 +145,29 @@ public:
     {
         edges.push_back(edge);
     }
+
+    std::string toString()
+    {
+        std::string res;
+
+        res += "Nodes:\n";
+        for (const auto &node : nodes)
+        {
+            res += "  (" + std::to_string(node.getX()) + ", " +
+                   std::to_string(node.getY()) + ") Label: " +
+                   std::to_string(node.getLabel()) + "\n";
+        }
+
+        res += "Edges:\n";
+        for (const auto &edge : edges)
+        {
+            res += "  (" + std::to_string(edge.getLabel1()) + ", " + std::to_string(edge.getLabel2()) + ")\n";
+        }
+
+        return res;
+    }
+
+    
 };
 
 // EMSCRIPTEN_KEEPALIVE int
@@ -169,13 +192,17 @@ EMSCRIPTEN_BINDINGS(graph)
         .property("label1", &Edge::getLabel1, &Edge::setLabel1)
         .property("label2", &Edge::getLabel2, &Edge::setLabel2);
 
+    emscripten::register_vector<Node>("vector<Node>");
+    emscripten::register_vector<Edge>("vector<Edge>");
+
     class_<Dijkstra>("Dijkstra")
         .constructor<>()
         .constructor<const std::vector<Node> &, const std::vector<Edge> &>()
         .property("nodes", &Dijkstra::getNodes, &Dijkstra::setNodes)
         .property("edges", &Dijkstra::getEdges, &Dijkstra::setEdges)
         .function("addNode", &Dijkstra::addNode)
-        .function("addEdge", &Dijkstra::addEdge);
+        .function("addEdge", &Dijkstra::addEdge)
+        .function("toString", &Dijkstra::toString);
     // emscripten::value_array<Node>("Node")
     //     .element(&Node::x)
     //     .element(&Node::y)

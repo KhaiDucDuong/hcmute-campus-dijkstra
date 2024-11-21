@@ -12,7 +12,27 @@
   <script src="./assembly/dijkstra.js"></script>
 </head>
 
-<body>
+<body onload="load_wasm()">
+  <script>
+    function load_wasm() {
+      console.log("Creating Dijkstra object...");
+      const dijkstra = new Module.Dijkstra();
+
+      fixedBlocks.forEach(block => {
+        dijkstra.addNode(new Module.Node(block.x, block.y, Number(block.label)));
+      });;
+
+      fixedEdges.forEach(edge => {
+        dijkstra.addEdge(new Module.Edge(edge[0], edge[1]))
+      })
+
+      console.log("Dijkstra: " + dijkstra.toString());
+    }
+
+    function findPath() {
+      document.getElementById("#src-node").va
+    }
+  </script>
   <header>
     <div class="title">
       <a href="index.html">Dijkstra Solver</a>
@@ -35,120 +55,13 @@
         </button>
       </div>
       <div>
-        <script>
-          // var addNums = Module.cwrap(
-          //   "AddNums",
-          //   "number",
-          //   ["number","number"],
-          // ) 
-
-          // function run_wasm() {
-          //   var result = Module.ccall("main", "number", null, null);
-          //   console.log(result);
-
-          //   var a = document.querySelector("#a").value;
-          //   var b = document.querySelector("#b").value;
-          //   result = Module.ccall(
-          //     "AddNums",
-          //     "number",
-          //     ["number", "number"],
-          //     [a, b]
-          //   );
-          //   console.log(result);
-
-          //   result = addNums(a, b);
-          //   console.log(result);
-          // }
-          // var memory = new WebAssembly.Memory({
-          //   initial: 256,
-          //   maximum: 512
-          // });
-
-
-          // code 2
-          // var exports;
-          // WebAssembly.instantiateStreaming(fetch("./assembly/dijkstra.wasm"), {
-          //   // js: {
-          //   //   mem: memory
-          //   // }
-          // })
-          //   .then(results => {
-          //     exports = results.instance.exports;
-          //     memory = results.instance.exports.memory;
-          //   });
-
-          // function run_wasm() {
-          //   var arr = new Uint32Array(memory.buffer);
-          //   for (var i = 0; i < 10; i++) {
-          //     arr[i] = i * 2;
-          //   }
-
-          //   var sum = exports.accumulate(0, 10);
-          // document.querySelector("#ret")
-          //   .innerHTML += `${sum}<br>`;
-          // }
-
-
-
-          // var Module = {
-          //   onRuntimeInitialized: function () {
-          //     console.log('Process Graph result: ' + Module.processGraph(nodes, edges));
-          //   }
-          // };
-
-          // var exports;
-          // WebAssembly.instantiateStreaming(fetch("./assembly/dijkstra.wasm"), {})
-          //   .then(results => {
-          //     exports = results.instance.exports;
-          //   });
-
-          function run_wasm() {
-            // const nodes = fixedBlocks.map(block => ({
-            //   block.x,
-            //   y: block.y,
-            //   label: block.label,
-            // }));
-            // const nodes = [Module.Node(10, 20, "1"), Module.Node(10, 20, "2")];
-
-            // const nodes = [];
-            // fixedBlocks.forEach(block => {
-            //   nodes.push([block.x, block.y, block.label]);
-            // });;
-            // const edges = fixedEdges;
-            // const results = Module.processGraph(nodes, edges);
-            // document.querySelector("#ret")
-            //   .innerHTML += `${results}<br>`;
-
-
-            // const nodes = new Array();
-            // fixedBlocks.forEach(block => {
-            //   nodes.push(new Module.Node(block.x, block.y, Number(block.label)));
-            // });;
-            // console.log("Nodes: " + nodes);
-
-            // const edges = new Array();
-            // fixedEdges.forEach(edge => {
-            //   edges.push(new Module.Edge(edge[0], edge[1]))
-            // })
-            // console.log("Edges: " + edges);
-
-            const dijkstra = new Module.Dijkstra();
-
-            fixedBlocks.forEach(block => {
-              dijkstra.addNode(new Module.Node(block.x, block.y, Number(block.label)));
-            });;
-
-            fixedEdges.forEach(edge => {
-              dijkstra.addEdge(new Module.Edge(edge[0], edge[1]))
-            })
-
-            console.log("Dijkstra: " + dijkstra.nodes);
-
-          }
-        </script>
-        <input type="number" id="a" />
-        <input type="number" id="b" />
-        <button onclick="run_wasm()">Add</button>
+        <input type="number" inputmode="numeric" min="0" id="src-node" placeholder="Source Node" />
+        <input type="number" inputmode="numeric" min="0" id="dest-node" placeholder="Destination Node" />
+        <button class="outline-btn run-btn" onclick="runAlgorithm()" disabled>
+          Find Path
+        </button>
+      </div>
+      <div>
         <div id="ret"></div>
       </div>
     </div>
