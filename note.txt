@@ -1,0 +1,3 @@
+python -m http.server 3005
+emsdk activate
+emcc -lembind -o dijkstra.js dijkstra.cpp

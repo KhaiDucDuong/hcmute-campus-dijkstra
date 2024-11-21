@@ -170,6 +170,7 @@ EMSCRIPTEN_BINDINGS(graph)
         .property("label2", &Edge::getLabel2, &Edge::setLabel2);
 
     class_<Dijkstra>("Dijkstra")
+        .constructor<>()
         .constructor<const std::vector<Node> &, const std::vector<Edge> &>()
         .property("nodes", &Dijkstra::getNodes, &Dijkstra::setNodes)
         .property("edges", &Dijkstra::getEdges, &Dijkstra::setEdges)

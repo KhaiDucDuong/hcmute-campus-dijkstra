@@ -118,20 +118,31 @@
             // const results = Module.processGraph(nodes, edges);
             // document.querySelector("#ret")
             //   .innerHTML += `${results}<br>`;
-            const nodes = new Array();
+
+
+            // const nodes = new Array();
+            // fixedBlocks.forEach(block => {
+            //   nodes.push(new Module.Node(block.x, block.y, Number(block.label)));
+            // });;
+            // console.log("Nodes: " + nodes);
+
+            // const edges = new Array();
+            // fixedEdges.forEach(edge => {
+            //   edges.push(new Module.Edge(edge[0], edge[1]))
+            // })
+            // console.log("Edges: " + edges);
+
+            const dijkstra = new Module.Dijkstra();
+
             fixedBlocks.forEach(block => {
-              nodes.push(new Module.Node(block.x, block.y, Number(block.label)));
+              dijkstra.addNode(new Module.Node(block.x, block.y, Number(block.label)));
             });;
-            console.log("Nodes: " + nodes);
 
-            const edges = new Array();
             fixedEdges.forEach(edge => {
-              edges.push(new Module.Edge(edge[0], edge[1]))
+              dijkstra.addEdge(new Module.Edge(edge[0], edge[1]))
             })
-            console.log("Edges: " + edges);
 
-            const dijkstra = new Module.Dijkstra(nodes, edges);
-            console.log("Dijkstra: " + dijkstra);
+            console.log("Dijkstra: " + dijkstra.nodes);
 
           }
         </script>
