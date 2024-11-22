@@ -1,6 +1,6 @@
 let blocks = document.getElementsByClassName("drawing-area")[0];
 let addEdge = false;
-let cnt = 42; // Start cnt from 4 so dynamic blocks begin after fixed blocks
+let cnt = 44; // Start cnt from 4 so dynamic blocks begin after fixed blocks
 let dist;
 
 // Initialize the distance matrix once when the page loads
@@ -49,12 +49,12 @@ var fixedBlocks = [
   { x: 461, y: 561, label: "9" },
   { x: 298, y: 560, label: "10" },
   { x: 460, y: 609, label: "11", name: "Cổng sau Highland" },
-  { x: 342, y: 617, label: "12" },
-  { x: 298, y: 598, label: "13" },
+  { x: 331, y: 620, label: "12" },
+  { x: 300, y: 598, label: "13" },
   { x: 196, y: 566, label: "14" },
   { x: 144, y: 568, label: "15", name: "Sân tập lái khu E" },
   { x: 150, y: 650, label: "16" },
-  { x: 463, y: 311, label: "17" },
+  { x: 463, y: 313, label: "17" },
   { x: 580, y: 602, label: "18", name: "Lối vào gửi bãi xe Khu A" },
   { x: 540, y: 454, label: "19" },
   { x: 464, y: 452, label: "20" },
@@ -81,6 +81,9 @@ var fixedBlocks = [
   { x: 637, y: 505, label: "41", name: "Cổng phụ bãi xe A" },
   { x: 85, y: 656, label: "42", name: "Bãi xe khu E" },
   { x: 152, y: 672, label: "43", name: "Cổng phụ khu E" },
+  { x: 498, y: 294, label: "44", name: "Cổng phụ gần kí túc xá" },
+  { x: 477, y: 271, label: "45" },
+  { x: 452, y: 271, label: "46", name: "Kí túc xá" },
 ];
 
 var fixedEdges = [
@@ -137,6 +140,9 @@ var fixedEdges = [
   [7, 41],
   [16, 43],
   [16, 42],
+  [44, 17],
+  [44, 45],
+  [45, 46],
 ];
 
 window.addEventListener("DOMContentLoaded", () => {
