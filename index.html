@@ -15,8 +15,10 @@
 <body onload="load_wasm()">
   <script>
     var dijkstra;
+    var pathResult;
 
     const drawPath = async (pathVector) => {
+      pathResult = pathVector;
       let i = pathVector.size() - 1;
       let prevLabel = pathVector.get(i).label;
       while (i > 0) {
@@ -38,7 +40,53 @@
       }
     };
 
+    const resetPath = () => {
+      if (!pathResult) return;
+      let i = pathResult.size() - 1;
+      let prevLabel = pathResult.get(i).label;
+      while (i > 0) {
+        i -= 1;
+        const nextLabel = pathResult.get(i).label;
+        console.log(`line-${prevLabel}-${nextLabel}`);
+        console.log(`line-${nextLabel}-${prevLabel}`);
+
+        const element = document.getElementById(`line-${prevLabel}-${nextLabel}`)
+          ? document.getElementById(`line-${prevLabel}-${nextLabel}`)
+          : document.getElementById(`line-${nextLabel}-${prevLabel}`);
+        console.log(element);
+        console.log(element.classList);
+        element.classList.add('line');
+        element.classList.remove('line-path');
+        console.log(element.classList);
+        prevLabel = nextLabel;
+      }
+      pathResult = undefined;
+    };
+
+    function loadSelectOptions() {
+      console.log("Adding options to select elements")
+      const srcElement = document.getElementById('src-node');
+      const destElement = document.getElementById('dest-node');
+      console.log(srcElement);
+      console.log(destElement);
+
+      fixedBlocks.forEach((block) => {
+        if (block.name) {
+          let opt1 = document.createElement('option');
+          opt1.value = block.label;
+          opt1.innerHTML = block.name;
+          srcElement.appendChild(opt1);
+
+          let opt2 = document.createElement('option');
+          opt2.value = block.label;
+          opt2.innerHTML = block.name;
+          destElement.appendChild(opt2);
+        }
+      });
+    }
+
     function load_wasm() {
+      loadSelectOptions();
       console.log("Creating Dijkstra object...");
       dijkstra = new Module.Dijkstra();
 
@@ -61,6 +109,7 @@
 
       if (src_label && dest_label) {
         const res = dijkstra.findPath(Number(src_label), Number(dest_label));
+        resetPath();
         drawPath(res);
         console.log("Path result: " + res.size());
         let i = res.size();
@@ -89,15 +138,15 @@
           Clear
         </button>
       </div>
-      <div>
+      <!-- <div>
         <input type="number" inputmode="numeric" id="source-node" placeholder="Source Node" />
         <button class="outline-btn run-btn" onclick="runAlgorithm()" disabled>
           Run
         </button>
-      </div>
+      </div> -->
       <div>
-        <input type="number" inputmode="numeric" min="0" id="src-node" placeholder="Source Node" />
-        <input type="number" inputmode="numeric" min="0" id="dest-node" placeholder="Destination Node" />
+        <select id="src-node" style="width: 200px; height: 31.2px;"></select>
+        <select id="dest-node" style="width: 200px; height: 31.2px;"></select>
         <button class="outline-btn run-btn" onclick="findPath_wasm()">
           Find Path
         </button>

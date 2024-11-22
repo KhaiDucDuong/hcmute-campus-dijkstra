@@ -87,8 +87,12 @@ body {
   padding: 0 10px;
   width: max-content;
   margin: auto;
+}
+
+.edge-weight {
   visibility: hidden;
 }
+
 header {
   width: 100%;
   padding: 5px;
@@ -159,6 +163,6 @@ main ul > li {
   cursor: pointer;
   z-index: 10;
   font-size: 0.8rem; /* Optional: Adjust font size if needed */
-  /* visibility: hidden; */
+  visibility: hidden;
 }
 
