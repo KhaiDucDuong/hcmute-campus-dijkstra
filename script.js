@@ -1,6 +1,6 @@
 let blocks = document.getElementsByClassName("drawing-area")[0];
 let addEdge = false;
-let cnt = 21; // Start cnt from 4 so dynamic blocks begin after fixed blocks
+let cnt = 36; // Start cnt from 4 so dynamic blocks begin after fixed blocks
 let dist;
 
 // Initialize the distance matrix once when the page loads
@@ -43,37 +43,54 @@ var fixedBlocks = [
   { x: 464, y: 356, label: "3" },
   { x: 462, y: 401, label: "4" },
   { x: 538, y: 401, label: "5" },
-  { x: 544, y: 499, label: "6" },
+  { x: 540, y: 505, label: "6" },
   { x: 597, y: 501, label: "7" },
   { x: 595, y: 414, label: "8" },
-  { x: 458, y: 561, label: "9" },
+  { x: 461, y: 561, label: "9" },
   { x: 298, y: 560, label: "10" },
-  { x: 460, y: 606, label: "11" },
+  { x: 460, y: 609, label: "11" },
   { x: 342, y: 617, label: "12" },
   { x: 298, y: 598, label: "13" },
-  { x: 198, y: 566, label: "14" },
+  { x: 196, y: 566, label: "14" },
   { x: 144, y: 568, label: "15" },
   { x: 150, y: 647, label: "16" },
-  { x: 461, y: 311, label: "17" },
-  { x: 580, y: 597, label: "18" },
+  { x: 463, y: 311, label: "17" },
+  { x: 580, y: 602, label: "18" },
   { x: 540, y: 454, label: "19" },
   { x: 464, y: 452, label: "20" },
-  { x: 883, y: 305, label: "21" },
-  { x: 970, y: 255, label: "22" },
-  { x: 982, y: 343, label: "23" },
-  { x: 874, y: 395, label: "24" },
-  { x: 980, y: 421, label: "25" },
+  { x: 375, y: 504, label: "21" },
+  { x: 378, y: 356, label: "22" },
+  { x: 294, y: 418, label: "23" },
+  { x: 195, y: 525, label: "24" },
+  { x: 377, y: 563, label: "25" },
+  { x: 462, y: 477, label: "26" },
+  { x: 349, y: 641, label: "27" },
+  { x: 295, y: 525, label: "28" },
+  { x: 278, y: 529, label: "29" },
+  { x: 297, y: 322, label: "30" },
+  { x: 461, y: 434, label: "31" },
+  { x: 406, y: 434, label: "32" },
+  { x: 406, y: 355, label: "33" },
+  { x: 227, y: 525, label: "34" },
+  { x: 228, y: 565, label: "35" },
 ];
 
 var fixedEdges = [
-  [1, 2],
-  [2, 3],
-  [1, 0],
+  [1, 23],
+  [23, 2],
+  [2, 22],
+  [22, 33],
+  [33, 3],
+  [1, 21],
+  [21, 0],
   [3, 4],
   [4, 5],
-  [4, 20],
-  [0, 20],
-  [20, 19],
+  [4, 31],
+  [31, 20],
+  [31, 32],
+  [20, 26],
+  [26, 0],
+  [19, 20],
   [5, 19],
   [0, 6],
   [19, 6],
@@ -81,23 +98,27 @@ var fixedEdges = [
   [5, 8],
   [8, 7],
   [17, 3],
-  [9, 0],
+  [0, 9],
   [9, 11],
-  [11, 18],
+  [18, 11],
   [11, 12],
   [12, 13],
   [13, 10],
-  [10, 1],
-  [14, 10],
+  [10, 28],
+  [28, 1],
+  [28, 29],
+  [14, 35],
+  [35, 10],   
   [15, 14],
   [15, 16],
-  [9, 10],
-  [21, 22],
-  [21, 23],
-  [21, 24],
-  [22, 23],
-  [23, 25],
-  [24, 25],
+  [9, 25],
+  [25, 10],
+  [14, 24],
+  [24, 34],
+  [35, 34], 
+  [27, 12],
+  [2, 30],
+  [32, 33],
 ];
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -241,7 +262,7 @@ blocks.addEventListener("click", (e) => {
   const y = e.y;
 
   // Show an alert with both x and y coordinates
-  console.log(`Click position: x = ${x}, y = ${y}`);
+  console.log(`Click position: x: ${x}, y: ${y}`);
 
   // Create a block at the specified position
   appendBlock(x, y);
@@ -269,7 +290,7 @@ const drawLine = (x1, y1, x2, y2, ar, bypassCheck = false) => {
   // Draw the line
   const line = document.createElement("div");
   line.id = `line-${ar[0]}-${ar[1]}`;
-  line.classList.add("line");
+  if (line.className.length == 0) line.classList.add("line");
   line.style.width = `${len}px`;
   line.style.left = `${x1}px`;
   line.style.top = `${y1}px`;
@@ -408,7 +429,7 @@ const colorEdge = async (el) => {
   if (el.style.backgroundColor !== "aqua") {
     await wait(1000);
     el.style.backgroundColor = "aqua";
-    el.style.height = "8px";
+    el.style.height = "16px";
   }
 };
 

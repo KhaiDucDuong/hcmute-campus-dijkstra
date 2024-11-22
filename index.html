@@ -16,6 +16,28 @@
   <script>
     var dijkstra;
 
+    const drawPath = async (pathVector) => {
+      let i = pathVector.size() - 1;
+      let prevLabel = pathVector.get(i).label;
+      while (i > 0) {
+        i -= 1;
+        const nextLabel = pathVector.get(i).label;
+        console.log(`line-${prevLabel}-${nextLabel}`);
+        console.log(`line-${nextLabel}-${prevLabel}`);
+
+        const element = document.getElementById(`line-${prevLabel}-${nextLabel}`)
+          ? document.getElementById(`line-${prevLabel}-${nextLabel}`)
+          : document.getElementById(`line-${nextLabel}-${prevLabel}`);
+        console.log(element);
+        await wait(1000);
+        console.log(element.classList);
+        element.classList.remove('line');
+        element.classList.add('line-path');
+        console.log(element.classList);
+        prevLabel = nextLabel;
+      }
+    };
+
     function load_wasm() {
       console.log("Creating Dijkstra object...");
       dijkstra = new Module.Dijkstra();
@@ -39,6 +61,7 @@
 
       if (src_label && dest_label) {
         const res = dijkstra.findPath(Number(src_label), Number(dest_label));
+        drawPath(res);
         console.log("Path result: " + res.size());
         let i = res.size();
         while (i > 0) {
