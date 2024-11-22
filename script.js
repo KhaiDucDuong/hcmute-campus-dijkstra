@@ -1,6 +1,6 @@
 let blocks = document.getElementsByClassName("drawing-area")[0];
 let addEdge = false;
-let cnt = 40; // Start cnt from 4 so dynamic blocks begin after fixed blocks
+let cnt = 42; // Start cnt from 4 so dynamic blocks begin after fixed blocks
 let dist;
 
 // Initialize the distance matrix once when the page loads
@@ -53,7 +53,7 @@ var fixedBlocks = [
   { x: 298, y: 598, label: "13" },
   { x: 196, y: 566, label: "14" },
   { x: 144, y: 568, label: "15", name: "Sân tập lái khu E" },
-  { x: 150, y: 647, label: "16", name: "Cổng phụ khu E" },
+  { x: 150, y: 650, label: "16" },
   { x: 463, y: 311, label: "17" },
   { x: 580, y: 602, label: "18", name: "Lối vào gửi bãi xe Khu A" },
   { x: 540, y: 454, label: "19" },
@@ -79,6 +79,8 @@ var fixedBlocks = [
   { x: 244, y: 524, label: "39" },
   { x: 498, y: 452, label: "40", name: "Tòa F" },
   { x: 637, y: 505, label: "41", name: "Cổng phụ bãi xe A" },
+  { x: 85, y: 656, label: "42", name: "Bãi xe khu E" },
+  { x: 152, y: 672, label: "43", name: "Cổng phụ khu E" },
 ];
 
 var fixedEdges = [
@@ -133,6 +135,8 @@ var fixedEdges = [
   [39, 29],
   [34, 39],
   [7, 41],
+  [16, 43],
+  [16, 42],
 ];
 
 window.addEventListener("DOMContentLoaded", () => {
