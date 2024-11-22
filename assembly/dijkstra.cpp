@@ -243,6 +243,7 @@ public:
     }
 
 private:
+    // calculate the euclidean distance between 2 nodes using pythagorean theorem
     float calculateDistance(Node srcNode, Node destNode)
     {
         int deltaX = destNode.getX() - srcNode.getX();
@@ -253,6 +254,7 @@ private:
 
     std::vector<Node> findPathDijkstra(Node srcNode, Node destNode)
     {
+        //check if the starting node and destination node are the same
         if (srcNode.getLabel() == destNode.getLabel())
         {
             std::vector<Node> path;
@@ -260,10 +262,14 @@ private:
             return path;
         }
 
+        //Create a priority queue, the node with the least distance is placed on top
         std::priority_queue<NodeQueue, std::vector<NodeQueue>, Compare> pq;
+        // dist array stores the current smallest distance to get to a node
         float dis[nodes.size()];
+        // prev array stores the previous node to get to a node in the shortest path
         Node prev[nodes.size()];
 
+        //creating the initial dist array, set all the values to inifinity and the src node dist to 0
         printf("Initial dist arr:\n");
         for (int i = 0; i < nodes.size(); i++)
         {
@@ -279,12 +285,15 @@ private:
         //     printf("index-%d, label-%d\n", i, prev[i].getLabel());
         // }
 
+        //push the src node to the queue, this will be the starting point
         NodeQueue firstNodeQ(srcNode, 0);
         pq.push(firstNodeQ);
 
+        //loop through the priority queue until it is empty
         while (pq.size())
         {
             printf("Priotiy Queue size %zu\n", pq.size());
+            //get the node that has the smallest distance in the priority queue
             Node currentNode = pq.top().getNode();
             float curDist = pq.top().getDist();
             int currentLabel = currentNode.getLabel();
@@ -292,13 +301,15 @@ private:
 
             printf("Current node-%d, dist-%f\n", currentLabel, curDist);
 
+            //find all the edges of the current node
             for (const Edge &edge : edges)
             {
                 if (edge.getLabel1() != currentLabel && edge.getLabel2() != currentLabel)
                 {
                     continue;
                 }
-
+                
+                //get the neighbor node
                 int neighborLabel = (edge.getLabel1() == currentLabel) ? edge.getLabel2() : edge.getLabel1();
 
                 Node neighborNode;
@@ -311,9 +322,12 @@ private:
                     }
                 }
 
+                //calculate the distance to get to the neighbor node from the current node
                 float edgeWeight = calculateDistance(currentNode, neighborNode);
                 float newDist = curDist + edgeWeight;
 
+                //update dis array and prev array, push the neighbor node to the priority queue 
+                //if the new dist is smaller than the current dist to go from the current node to the neighbor node
                 if (newDist < dis[neighborLabel])
                 {
                     dis[neighborLabel] = newDist;
@@ -325,12 +339,14 @@ private:
             }
         }
 
+
         printf("Final Prev array:\n");
         for (int i = 0; i < nodes.size(); i++)
         {
             printf("index-%d, label-%d\n", i, prev[i].getLabel());
         }
 
+        //trace back the shortest path to go from src node to dest node using the prev arrya
         std::vector<Node>
             path;
         path.push_back(destNode);
